@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
+from pydantic import BaseModel
 
 Base = declarative_base()
 
@@ -11,9 +12,9 @@ class UserModel(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True, index=True, nullable=False)
-    email = Column(String(100), unique=True, index=True, nullable=False)
-    password = Column(String(25), unique=True)
+    name = Column(String(50),index=True, nullable=False)
+    email = Column(String(100),index=True, nullable=False)
+    password = Column(String(25), nullable=False)
     phone_number = Column(String(20))
     wallet = Column(Float)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -57,3 +58,4 @@ class OrderModel(Base):
     def update_total_price(self, new_price):
         self.total_price = new_price
         self.modified_at = datetime.utcnow()
+

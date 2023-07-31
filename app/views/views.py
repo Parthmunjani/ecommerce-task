@@ -1,16 +1,21 @@
-
-from fastapi import HTTPException
+from app.schema.user import UserCreate
+from fastapi import HTTPException,Depends
 from models.users import UserModel
 from database import SessionLocal
-from main import app
+from main import app,get_db
+from sqlalchemy.orm import Session
 
 
-@app.post("/users/", response_model=UserModel)
-async def create_user(user_data: UserModel):
+@app.post("/users/")
+def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
     try:
-        async with SessionLocal() as db:
-            query = UserModel.__table__.insert().values(**user_data.dict())
-            last_record_id = await db.execute(query)
-            return {**user_data.dict(), "id": last_record_id}
+        # Create a new User model instance from the received data
+        user_model = UserModel(**user_data.dict())
+        db.add(user_model)
+        db.commit()
+        db.refresh(user_model)  # To populate the generated fields like id
+        # Return the created user
+        return user_model
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Error creating user")
+        raise HTTPException(status_code=500, detail=str(e))
