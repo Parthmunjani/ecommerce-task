@@ -65,7 +65,6 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
 @app.post("/users/orders/", response_model=OrderRequest)
 def create_order(order_data: OrderRequest, db: Session = Depends(get_db)):
     try:
-        # Fetch the user and product models
         user = db.query(UserModel).filter(UserModel.id == order_data.user_id).first()
         product = db.query(ProductModel).filter(ProductModel.id == order_data.product_id).first()
 
@@ -89,11 +88,9 @@ def create_order(order_data: OrderRequest, db: Session = Depends(get_db)):
         db.commit()
         db.refresh(order)
 
-        # Ensure user has a valid wallet before performing the addition
         if user.wallet is None:
             user.wallet = 0
 
-        # Update the user's wallet with the discounted total price
         user.wallet += discounted_total_price
         db.commit()
 
