@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class UserCreate(BaseModel):
     # id : int
@@ -14,4 +15,4 @@ class UserResponse(BaseModel):
     email: str
     password: str
     phone_number: str = None
-    # wallet : float
+    wallet :Optional[float]  

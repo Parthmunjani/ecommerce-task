@@ -1,6 +1,10 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime
+# models/product.py
+
+from sqlalchemy import Column, Integer, String, DateTime, Float
+from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
-from models.users import Base
+
+Base = declarative_base()
 
 class ProductModel(Base):
     __tablename__ = 'product'
@@ -12,10 +16,7 @@ class ProductModel(Base):
     modified_at = Column(DateTime, default=datetime.utcnow)
 
     def purchase_product(self, user):
-        discount_amount = self.price * 0.1 # Calculate 10% of the product price
-        # Update the user's wallet by adding the discount_amount
+        discount_amount = self.price * 0.1
         user.wallet += discount_amount
-        # Optionally, you can update the modified_at timestamp of the user
         user.modified_at = datetime.utcnow()
-        # Return the discount amount for any further processing or displaying to the user
         return discount_amount

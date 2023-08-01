@@ -58,4 +58,3 @@ class OrderModel(Base):
     def update_total_price(self, new_price):
         self.total_price = new_price
         self.modified_at = datetime.utcnow()
-

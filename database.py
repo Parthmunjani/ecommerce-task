@@ -1,9 +1,6 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
-
-
 
 db_host = os.environ.get('DB_HOST', 'localhost')
 db_username = os.environ.get('DB_USERNAME', 'postgres')
@@ -22,5 +19,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
